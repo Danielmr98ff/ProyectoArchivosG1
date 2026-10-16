@@ -1,6 +1,7 @@
 package org.example;
 
-import static org.example.services.FileService.leerArchivoTextoFiltrado;
+import org.example.services.ConfigService;
+import org.example.services.FileService;
 
 /**
  * Clase principal de la aplicación.
@@ -22,6 +23,9 @@ public class App {
      * @param args Argumentos de línea de comandos (no utilizados)
      */
     public static void main(String[] args) {
-        leerArchivoTextoFiltrado("teclado").forEach(System.out::println);
+
+        ConfigService configService = new ConfigService();
+        FileService fileService = new FileService(configService);
+        fileService.leerArchivoTextoFiltrado("Samsung").forEach(System.out::println);
     }
 }

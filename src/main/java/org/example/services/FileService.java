@@ -30,19 +30,17 @@ import java.util.List;
  */
 public class FileService {
 
-    private static String fileName;
-    private static ConfigService configService;
+    private String fileName;
+    private ConfigService configService;
 
     /**
      * Inyecta una instancia de {@link ConfigService} para obtener la configuración.
      *
      * @param configService Instancia de ConfigService a inyectar
      */
-    public static void setConfigService(ConfigService configService) {
-        FileService.configService = configService;
-        if (FileService.configService != null && FileService.configService.props != null) {
-            FileService.fileName = FileService.configService.props.getProperty("fichero", "temp.txt");
-        }
+    public FileService(ConfigService configService) {
+        this.configService = configService;
+        this.fileName = this.configService.getProperty("fichero");
     }
 
     /**
@@ -54,7 +52,7 @@ public class FileService {
      * @throws IllegalArgumentException Si el nombre del archivo o la lista son nulos
      * @throws RuntimeException Si ocurre un error durante la escritura
      */
-    public static void guardarArchivoTexto(List<Producto> productos) {
+    public void guardarArchivoTexto(List<Producto> productos) {
         if (fileName == null) {
             throw new IllegalArgumentException("El archivo no puede ser nulo");
         }
@@ -87,7 +85,7 @@ public class FileService {
      * @return Lista de productos leídos del archivo
      * @throws RuntimeException Si el archivo no existe o ocurre un error durante la lectura
      */
-    public static List<Producto> leerArchivoTexto() {
+    public List<Producto> leerArchivoTexto() {
         var salida = new ArrayList<Producto>();
         try (var bfr = new BufferedReader(new FileReader(fileName))) {
             String s;
@@ -118,7 +116,7 @@ public class FileService {
      * @return Lista de productos leídos del archivo
      * @throws RuntimeException Si ocurre un error durante la lectura
      */
-    public static List<Producto> leerArchivoTextoNIO() {
+    public List<Producto> leerArchivoTextoNIO() {
         Path archivo = Path.of(fileName);
         var salida = new ArrayList<Producto>();
         List<String> lineas;
@@ -154,7 +152,7 @@ public class FileService {
      * @return Lista de productos filtrados según la palabra clave
      * @throws RuntimeException Si ocurre un error durante la lectura
      */
-    public static List<Producto> leerArchivoTextoFiltrado(String keyword) {
+    public List<Producto> leerArchivoTextoFiltrado(String keyword) {
         Path archivo = Path.of(fileName);
         var salida = new ArrayList<Producto>();
 
@@ -185,7 +183,7 @@ public class FileService {
      * @throws NumberFormatException Si los campos numéricos no tienen el formato esperado
      * @throws ArrayIndexOutOfBoundsException Si la cadena no tiene el formato esperado (estructura incorrecta)
      */
-    private static Producto createProductoFromString(String s) {
+    private Producto createProductoFromString(String s) {
         String[] campos = s.split(";");
         return new Producto(
                 Long.parseLong(campos[0]),

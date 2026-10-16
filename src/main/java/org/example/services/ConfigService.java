@@ -24,9 +24,9 @@ public class ConfigService {
      * Colección de propiedades de configuración cargadas desde {@code config.properties}.
      * <p>Estas propiedades pueden accederse desde cualquier parte de la aplicación.</p>
      */
-    public static final Properties props = new Properties();
+    public final Properties props = new Properties();
 
-    static {
+    public ConfigService(){
         try {
             props.load(new FileReader("config.properties"));
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class ConfigService {
      * @param key Clave de la propiedad a buscar
      * @return Valor asociado a la clave, o {@code null} si la propiedad no existe
      */
-    public static String getProperty(String key) {
+    public String getProperty(String key) {
         return props.getProperty(key);
     }
 }
